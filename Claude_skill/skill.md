@@ -394,6 +394,70 @@ However, Layer 1 (Environmental Context) must always be executed.
 The environment changes the interpretation of emotion 
 (a smile in an office vs. a smile in a bedroom).
 
+## Evidence Tagging
+
+All output items must carry one of the following evidence labels.
+This explicitly separates "observational fact" from "inference."
+
+**Label definitions:**
+- **[obs]** — Observational fact. Objectively verifiable from the image.
+  Examples: "Mouth corners raised [obs]," "Three people in close contact [obs]," "Hair is wet [obs]"
+
+- **[inf-high]** — High-confidence inference. Derived with high certainty from multiple observational facts.
+  Examples: "Likely after water play [inf-high]" (from wet hair + outdoor + casual clothing)
+  "Friends or family [inf-high]" (from close distance + coordinated pose + protective positioning)
+
+- **[inf-low]** — Low-confidence inference. Hypothetical estimate from limited information. Weak basis.
+  Examples: "Estimated Philippines [inf-low]" (from skin tone + background buildings; other regions possible)
+  "Intent to post on social media later [inf-low]" (from selfie composition; weak basis)
+
+**Tagging rules:**
+- Layer 1–2 physical observations are generally [obs]
+- Layer 3 relationship inferences are [inf-high] or [inf-low]
+- Layer 4 narratives and voice-overs are [inf-high] or [inf-low]
+- Layer 5 emotion estimates are [inf-high] (backed by observational facts) or [inf-low]
+- Layer 7 mΔ predictions are [inf-high] (structurally grounded) or [inf-low]
+- Layer 8 self-diagnosis requires no evidence labels (metacognitive layer)
+- Analyses with many [inf-low] tags should be reflected in Layer 8 confidence assessment
+
+## Interpretation Ranking
+
+In the Layer 6 integrated report, present scene interpretations **not as a single conclusion but as a probability distribution**.
+The AI should behave not as an answer engine (a machine that produces correct answers) but as an **interpretation engine** (a machine that presents the interpretation space).
+
+**Principle: Do not collapse the interpretation space prematurely.**
+
+**Procedure:**
+1. Starting from the Layer 4 narrativization, generate 2–4 alternative interpretations
+2. Assign plausibility probability to each interpretation based on consistency with Layer 1–2 observational facts [obs]
+3. Probabilities must sum to 1.0
+4. Cite evidence-tagged grounds for each interpretation
+5. When context is provided, include context consistency/contradiction in the grounds
+
+**Output format:**
+```
+[Interpretation Ranking]
+  I1: {interpretation} — P={0.00–1.00}
+      Grounds: {observational facts or inferences} [{obs/inf-high/inf-low}]
+  I2: {interpretation} — P={0.00–1.00}
+      Grounds: {observational facts or inferences} [{obs/inf-high/inf-low}]
+  I3: {interpretation} — P={0.00–1.00}
+      Grounds: {observational facts or inferences} [{obs/inf-high/inf-low}]
+  I4: Other possibilities — P={remaining probability}
+```
+
+**Probability assignment rules:**
+- Interpretations with more [obs] support receive higher P
+- Interpretations supported only by [inf-low] must have P ≤ 0.25
+- Interpretations contradicting provided context receive reduced P proportional to contradiction severity
+- Even when context is not contradicted, verify context reliability before reflecting in P
+- Always retain "Other possibilities" (never fully close the interpretation space)
+
+**Important:**
+- The highest-P interpretation ≠ "the correct answer." It is merely the most plausible candidate
+- When P values are close (e.g., I1=0.35, I2=0.30), explicitly flag as "a scene where judgment is divided"
+- When interpretation distribution entropy is high (dispersed), report "high ambiguity" in Layer 8
+
 ## Prohibited Actions
 
 - **Do not determine emotions from expressions alone**: Always integrate with context
@@ -406,3 +470,4 @@ The environment changes the interpretation of emotion
 - **Do not skip self-diagnosis**: Layer 8 is the metacognitive layer evaluating one's own biases. Without asking "does my own lens carry bias?" the AI cannot self-detect Overdecode/Underdecode
 - **Do not casually conclude "no bias" in self-diagnosis**: Some bias is always present. "Not detected" and "does not exist" are different
 - **Do not take provided context at face value**: Context is filtered through the provider's lens. When it contradicts image observational facts (Layers 1–2), prioritize observational facts. Always explicitly report contradictions when found
+- **Do not collapse interpretations into a single conclusion**: Present multiple interpretations with probabilities via Interpretation Ranking. Always retain "Other possibilities" and never fully close the interpretation space
