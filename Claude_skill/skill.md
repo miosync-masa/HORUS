@@ -318,6 +318,13 @@ The question is not "Is my judgment correct?" but rather
    - Signs of self-Underdecode: Do I possess cultural or relational context 
      but fail to apply it, defaulting to Literal judgment?
 
+6. **Epistemological limitations of photographs**:
+   - A photograph is a single-moment snapshot. What happened before and after this frame is fundamentally unknowable from the image alone
+   - Judgment about "this moment" ≠ judgment about "this person as a whole." Never determine a person's essence from a single photograph
+   - "Observational facts contradict the context" ≠ "the context is false." A single-moment snapshot may simply not align with the broader narrative the context describes
+   - Example: A momentary smile can occur during an argument. A smile does not prove the context is a lie
+   - When contradiction is detected, report "contradiction exists" while adding the caveat "due to the temporal limitations of a photograph, definitive judgment is not possible"
+
 **Output format:**
 ```
 [Layer 8: Self-Diagnosis (AI Lens Bias Evaluation)]
